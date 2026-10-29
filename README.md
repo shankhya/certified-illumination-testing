@@ -2,7 +2,7 @@
 
 Associated data and computational certificates for **Certified illumination-test counts: limits imposed by spectral regularity and measurement tolerance**, by Shankhya Debnath.
 
-This private repository accompanies an author-review draft. It has not been submitted, peer reviewed, or publicly released. The draft uses Optica's official two-column length-check template. Its AI-generated narrative is not submission-compliant under Optica's current AI-text policy; see `AUTHOR_REVIEW.md`. No claim of journal acceptance or exhaustive literature priority is made.
+This private repository accompanies an author-review draft. It has not been submitted, peer reviewed, or publicly released. The nine-page draft uses the author-supplied Optica universal single-column template, including references. Section 7 is a Discussion; there is no standalone reproducibility section. Its AI-generated narrative is not submission-compliant under Optica's current AI-text policy; see `AUTHOR_REVIEW.md`. No claim of journal acceptance or exhaustive literature priority is made.
 
 ## Main result and exact scope
 
@@ -57,7 +57,7 @@ MATLAB R2025b was used for the checked release. The first two scripts independen
 
 ## Build the paper
 
-Use a standard LaTeX installation or Overleaf with `paper/main.tex`. Only one manuscript `.tex` file is used. The official `opticajnl` class, required style files, and vector figures are supplied. With a local installation:
+Use a standard LaTeX installation or Overleaf with `paper/main.tex`. Only one manuscript `.tex` file is used. The official `optica-article` class, required style files, and vector figures are supplied. With a local installation:
 
 ```console
 cd paper

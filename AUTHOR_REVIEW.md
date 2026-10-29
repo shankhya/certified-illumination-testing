@@ -12,6 +12,8 @@ The current narrative was drafted with OpenAI Codex assistance; it must not be r
 
 OpenAI Codex assisted the mathematical investigation, implementation, computational checks, figure-generation scripts, and drafting. The figures are deterministic MATLAB plots of frozen numerical records, not generated illustrations or invented measurements. MATLAB scripts and exact certificates are retained so the plots and claims can be checked without a generative model. The local Codex CLI version observed during preparation was `0.165.0-alpha.1.2`; an exact model build identifier covering all historical research sessions was not retained and must not be invented. A final disclosure should accurately reflect the tools and versions that can be established from the author's records.
 
+The 29 October format revision uses the supplied universal template and replaces the reproducibility section with Discussion. The requested humanizer skill was applied to the narrative: repetitive framing and inflated wording were removed, while the mathematical claims and qualifications were retained. This editorial pass does not change the AI-assisted origin of the draft or its author-review status.
+
 ## Scientific review priorities
 
 1. Review the problem's practical relevance: the small fixed library, normalized XYZ metric, slope class, and continuous relative-SPD assumptions. These are the main external-validity limitations.
