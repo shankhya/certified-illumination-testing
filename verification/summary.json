@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "createdAtUtc": "2026-10-29T06:17:24.320230+00:00",
+  "checkedFrozenFiles": 30,
+  "optimizerCalls": 0,
+  "reports": {
+    "frontier": {
+      "status": "PASS",
+      "report": "verification/frontier.json"
+    },
+    "stability": {
+      "status": "PASS",
+      "report": "verification/stability.json"
+    },
+    "stability-faults": {
+      "status": "PASS",
+      "report": "verification/stability-faults.json"
+    },
+    "prediction": {
+      "status": "PASS",
+      "report": "verification/prediction.json"
+    }
+  },
+  "elapsedSeconds": 108.657
+}

@@ -1,0 +1,39 @@
+{
+  "preparedAtUtc": "2026-10-29T06:28:14.107978+00:00",
+  "author": "Shankhya Debnath",
+  "title": "Certified illumination-test counts: limits imposed by spectral regularity and measurement tolerance",
+  "researchEvidenceCommit": "4f527c284c0587fdb74a55270c4fd6d41b50f8db",
+  "researchHandoffCommit": "67b6481635384a2e6c21c9503083473502ad952b",
+  "manuscriptPages": 8,
+  "manuscriptSHA256": "c7d768fac6411024cac46d9a9dd10efed6d20d1e3e50b9c46bbfa5cda13c3e89",
+  "manuscriptSourceSHA256": "a4b55e899df8c2a75de1dfb3948ce8d1c94f0cf3295f23e67ed3bb146ed5c9e5",
+  "newOptimizerCalls": 0,
+  "status": "AUTHOR_REVIEW_DRAFT_NOT_SUBMITTED",
+  "publicRelease": false,
+  "templateSource": "https://opg.optica.org/resources/author/templates/latex-length-check.zip",
+  "templateSHA256": "4fb0b07262c691c44a6488c9092a191e7c55de05aca8ab4f50020762ff0d4b23",
+  "journalAIPolicy": "https://opg.optica.org/content/author/portal/item/review-general-policies",
+  "authorDeclarationsConfirmed": "No specific funding and no conflicts of interest.",
+  "fontCheck": {
+    "status": "PASS",
+    "fonts": {
+      "/IHAIZV+NimbusSanL-Regu": true,
+      "/BZIVMZ+NimbusSanL-Bold": true,
+      "/IXFAWU+URWPalladioL-Roma": true,
+      "/TQTHRL+NimbusSanL-ReguItal": true,
+      "/YEUUOC+URWPalladioL-Bold": true,
+      "/AKHCZK+CMSY10": true,
+      "/CAFSZL+URWPalladioL-Ital": true,
+      "/PVTTLK+CMR10": true,
+      "/JAGKKY+CMEX10": true,
+      "/FKPJSN+CMMI10": true,
+      "/DDIEWW+PazoMath-Italic": true,
+      "/NOMARO+PazoMathBlackboardBold": true,
+      "/KPXLOM+PazoMath-BoldItalic": true,
+      "/VDVGTR+PazoMath": true,
+      "/ArialMT": true,
+      "/mwb_cmmi10": true
+    },
+    "pages": 8
+  }
+}

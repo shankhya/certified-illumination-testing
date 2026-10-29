@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "optimizerCalls": 0,
+  "rawCIETablesRead": 4,
+  "maximumBlockIntegralDiscrepancy": 5.3290705182007514E-15,
+  "maximumWitnessAbsoluteIntegralDiscrepancy": 6.106226635438361E-16,
+  "kappaAxisDiscrepancy": 1.3552527156068805E-20,
+  "witnessCapDiscrepancy": 5.4210108624275222E-20,
+  "verticesChecked": 3,
+  "maximumVertexUpper": 0.02,
+  "excludedProtocols": 31,
+  "denominatorControlPassed": true
+}

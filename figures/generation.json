@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "optimizerCalls": 0,
+  "frontierGap": 0.0011042102411597393,
+  "witnessMaximumSlope": 0.035499999964500012,
+  "witnessDeploymentMismatch": 0.021836307236558848,
+  "sourceFiles": [
+    "R174-matlab-inputs.json",
+    "R170-matlab-inputs.json",
+    "R171-matlab-inputs.json"
+  ]
+}

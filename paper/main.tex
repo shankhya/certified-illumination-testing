@@ -1,0 +1,445 @@
+\documentclass[9pt,twocolumn,twoside]{opticajnl}
+\journal{opticajournal}
+\setboolean{shortarticle}{false}
+\setboolean{displaycopyright}{false}
+\doi{}
+\usepackage{booktabs}
+\let\openbox\relax
+\usepackage{amsthm}
+\usepackage{lineno}
+\linenumbers
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newcommand{\Cg}{\mathcal C_g}
+\newcommand{\Dg}{\mathcal D_g}
+\newcommand{\B}{\mathcal B}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\norm}[1]{\lVert#1\rVert}
+\title{Certified illumination-test counts: limits imposed by spectral regularity and measurement tolerance}
+\author[1,*]{Shankhya Debnath}
+\affil[1]{Department of Printing Technology, Regional Institute of Printing Technology, Kolkata, India}
+\affil[*]{shankhya@riptkolkata.org}
+\begin{abstract}
+How many illumination tests are sufficient to bound the color mismatch of every admissible reflectance pair under other lighting? We answer this question for a fixed five-illuminant CIE library, three deployment illuminants, and passive reflectances with a continuous slope bound. For a normalized XYZ infinity-norm mismatch limit of 0.02 and individual slope bound of $0.0355\,\mathrm{nm}^{-1}$, all five tests are necessary and sufficient over a nonzero acceptance-tolerance interval. Explicit spectra defeat every smaller selection even with exact tests. Continuous dual certificates and counterexample spectra also enclose the precision--regularity boundary: the critical slope exceeds $0.039324\,\mathrm{nm}^{-1}$ for exact tests but is below $0.018547\,\mathrm{nm}^{-1}$ at tolerance 0.002. The sharp count persists in quantified neighborhoods of the spectral class and under normalized-kernel or shared illuminant-shape errors. A calibrated affine predictor supplies a supporting optimal-recovery interpretation. Exact rational verification and independent MATLAB checks establish guarantees for the declared continuous model, rather than only a wavelength grid or a reflectance dataset.
+\end{abstract}
+\begin{document}
+\maketitle
+\noindent\textit{Author-review draft. The narrative requires author preparation before submission under the journal's AI-text policy.}
+
+\section{Introduction}
+Two reflecting objects can agree under one light and disagree under another. Additional illumination tests reduce this ambiguity, but agreement under several lights does not by itself specify what remains possible under deployment lighting. A certification question is therefore useful: within a declared library, what is the smallest number of illumination tests that guarantees a prescribed deployment mismatch limit for every reflectance pair in a stated class? A successful selection needs a universal upper bound. Establishing that fewer tests cannot succeed also needs lower bounds covering every smaller selection.
+
+The underlying phenomenon and much of its mathematical structure are established. Metameric reflectance construction and multiple-illuminant matching have a long history~\cite{worthey,burns}. Metamer sets support reflectance estimation~\cite{morovic2006}, and set-theoretic color estimation already combines measurement consistency, physical bounds, and smoothness constraints~\cite{sharma}. Smoothness can materially change a predicted metamer-mismatch region~\cite{stiebel}. Operator formulations explain the information loss in color formation and its consequences for metamer mismatching~\cite{morovic2026a,morovic2026b}. These results motivate explicit spectral assumptions rather than an unrestricted extrapolation from a small set of observed surfaces.
+
+Illumination and filter selection also arise in spectral recovery. Multiplexed illumination changes the acquisition design~\cite{park}; optimized illuminations and filter combinations can improve reconstruction performance on specified samples~\cite{fu,niu}. Such performance measures answer a different question from the smallest count certified for an entire function class. Illuminant-induced metamer-mismatch indices provide another related perspective, often through response-set volumes or perceptual shifts~\cite{esposito}. Here the objective is a maximum coordinate error, with the response normalization fixed before selecting the tests.
+
+Worst-case information radii, bounded observation errors, and robust experiment design are established outside color science as well~\cite{novak,tanaskovic,ettehad,foucart}. In particular, the relation between ambiguity and optimal prediction is classical, as is affine optimality for scalar recovery from linear information on convex symmetric classes. We use this theory to interpret the testing results; we do not propose a new general recovery principle. Nor is replacing a reference match by all admissible pairs intrinsically new: for the symmetric class used here, its difference body is twice the class centered at the flat half-reflectance.
+
+Our contribution is a quantitative separation between test count and precision, proved for a declared continuous color model. At a specified spectral slope, every four-light selection from the library fails even with exact tests, whereas all five lights succeed with a strictly positive tolerance. With all five retained, improved precision more than doubles the certified critical-slope range relative to tolerance 0.002. The count survives explicit simultaneous errors in the reflectance model and response kernels. These statements have continuous upper certificates and constructive lower witnesses, including coverage of all smaller protocols. They are conditional results for this library, observer, metric, and spectral class, rather than a universal requirement of five illuminants.
+
+\section{Testing problem and spectral model}
+\subsection{Responses and admissible reflectances}
+Let $I=[380,780]$ nm and let $f_X,f_Y,f_Z$ be the CIE 1931 two-degree color-matching functions. For an illuminant $E$ define
+\begin{equation}
+ Z_E=\int_I E f_Y>0,\qquad
+ a_{E,c}=\frac{E f_c}{Z_E},\qquad
+ A_Er=(\ip{a_{E,c}}{r})_{c=X,Y,Z},                 \label{eq:response}
+\end{equation}
+where $\ip{k}{r}=\int_I k(\lambda)r(\lambda)\,d\lambda$. White has $Y=1$ under each illuminant. Coordinate weights are all one; no chromatic adaptation or nonlinear perceptual transform is applied.
+
+The nominal continuous kernels are specified by original CIE tables~\cite{ciexyz,ciea,cied65,ciefl}. Each illuminant and each matching function is separately interpolated linearly between its 1 nm tabulated values; their product is integrated exactly on each cell, including in $Z_E$. Thus $a_{E,c}$ is piecewise quadratic. This convention defines a continuous model. It does not assert that a physical lamp or observer has that exact behavior between tabulated wavelengths.
+
+For $g\geq0$ the individual-reflectance class is
+\begin{equation}
+ \Cg=\{r:I\to[0,1]:r\text{ is Lipschitz},\ \operatorname{Lip}(r)\leq g\}.
+                                                        \label{eq:class}
+\end{equation}
+The unit of $g$ is $\mathrm{nm}^{-1}$. This is a compact convex set in the uniform norm, symmetric about $r=1/2$. Its exact difference class is
+\begin{equation}
+ \Dg=\Cg-\Cg
+ =\{d:|d|\leq1,\ \operatorname{Lip}(d)\leq2g\}.          \label{eq:diff}
+\end{equation}
+The reverse inclusion follows from $r_+=(1+d)/2$ and $r_-=(1-d)/2$. Consequently each feasible difference used below represents two admissible physical-range spectra, and the bound on their individual slopes is half the difference slope.
+
+\subsection{Constituent selection and acceptance tolerance}
+The test library was fixed before the count and precision refinements. Its constituents and the deployment family are
+\begin{align}
+ \mathcal L&=\{\mathrm A,\mathrm{D65},\mathrm{FL2},\mathrm{FL7},\mathrm{FL11}\},\nonumber\\
+ \mathcal E&=\{\mathrm{FL3},\mathrm{FL8},\mathrm{FL12}\}.     \label{eq:library}
+\end{align}
+Stack the three deployment responses into $Q:C(I)\to\mathbb R^9$. For $T\subseteq\mathcal L$, stack its test responses into $M_T$. One test means all three XYZ coordinates under one named constituent light. The worst remaining mismatch is
+\begin{equation}
+ \B_g(T;\boldsymbol\delta)=
+ \sup_{\substack{d\in\Dg\\\norm{A_i d}_\infty\leq\delta_i,\ i\in T}}
+       \norm{Qd}_\infty.                                \label{eq:B}
+\end{equation}
+Compactness makes this supremum a maximum. For a common tolerance $\delta$, define
+\begin{equation}
+ n_g(\delta)=\min\{|T|:T\subseteq\mathcal L,\ \B_g(T;\delta)\leq\tau\},
+ \qquad \tau=0.02,                                    \label{eq:count}
+\end{equation}
+with $n_g(\delta)=\infty$ if no selection succeeds. All tolerances in Eqs.~\eqref{eq:B}--\eqref{eq:count} are \emph{pairwise acceptance tolerances}. A bound on additive measurement error is a different quantity, treated in Section~\ref{sec:prediction}.
+
+Increasing the spectral class or acceptance tolerances cannot decrease $\B_g$. Adding tests cannot increase it. For the full library, write
+\begin{equation}
+ G(\delta)=\sup\{g\geq0:\B_g(\mathcal L;\delta)\leq\tau\}.
+                                                        \label{eq:G}
+\end{equation}
+The count question and this critical-regularity question are complementary: the first concerns selecting information, the second concerns the spectral complexity that a fixed information set can certify.
+
+\section{Continuous certificates and exact counterexamples}
+\subsection{A scalar certificate for every target coordinate}
+Write the rows of $M_T$ as $m_i$ and one row of $Q$ as $q$. Let $v$ be any real multiplier vector and let $p$ be absolutely continuous on $I$, with $p(380)=p(780)=0$. Define
+\begin{equation}
+ u=q-\sum_i v_i m_i,\quad
+ R=\int_I|u+p'|,\quad P\geq\int_I|p|,\quad N=\sum_i|v_i|.
+                                                        \label{eq:certificate}
+\end{equation}
+These quantities give an upper certificate without an assertion that the chosen multipliers solve an optimization problem exactly.
+
+\begin{proposition}[Continuous upper certificate]\label{prop:dual}
+For any $d\in\Dg$ satisfying $|\ip{m_i}{d}|\leq\delta_i$,
+\begin{equation}
+ |\ip qd|\leq R+2gP+\sum_i|v_i|\delta_i.                 \label{eq:dual}
+\end{equation}
+If each of the nine target rows has a certificate with right-hand side at most $\tau$, the selected tests satisfy the deployment requirement for every pair in $\Cg$.
+\end{proposition}
+\begin{proof}
+Integration by parts, valid for the Lipschitz function $d$, gives
+\[
+ \ip qd=\sum_i v_i\ip{m_i}{d}+\ip{u+p'}d+\int_I p d'.
+\]
+The endpoint terms vanish. Apply $|d|\leq1$, $|d'|\leq2g$ almost everywhere, and the declared test bounds. Taking the maximum of the nine scalar bounds proves the vector claim.
+\end{proof}
+
+Equation~\eqref{eq:dual} is a support inequality specialized to a bounded-slope color class. It shares the residual-functional structure of classical recovery bounds~\cite{foucart,ettehad}. Its role here is to provide independently checkable numerical certificates for a concrete testing problem.
+
+\subsection{Polynomial construction and verification}
+The kernels are quadratic on each nominal wavelength cell. We choose a continuous piecewise-cubic $p$ by specifying its values at cell endpoints. On a cell $[a,a+h]$, choose
+\begin{equation}
+ p'=c-u,\qquad
+ c=\frac{p(a+h)-p(a)+\int_a^{a+h}u}{h}.                 \label{eq:flux}
+\end{equation}
+Then $u+p'=c$ exactly on the cell, so its contribution to $R$ is $h|c|$. Matching flux values make $p$ absolutely continuous across cells. In particular, the construction charges a nonzero residual rather than assuming exact annihilation of an approximate kernel.
+
+For a cubic written in the Bernstein basis on a cell, $p=\sum_{k=0}^3 b_k B_{k,3}$, nonnegativity and partition of unity yield
+\begin{equation}
+ \int_a^{a+h}|p|\leq\frac h4\sum_{k=0}^3|b_k|.          \label{eq:bernstein}
+\end{equation}
+The coefficients depend affinely on the multipliers and endpoint fluxes. Their absolute values can therefore enter a linear program for candidate generation. The Bernstein convex-hull argument is established numerical machinery~\cite{ricciardi}; its use does not supply a novelty claim. Recursive dyadic subdivision tightens the integral enclosure while preserving an exact upper bound.
+
+Candidate generation and proof checking are separated. Decimal CIE source values are interpreted as exact rationals. Saved numerical multiplier and flux values are also given exact rational representations. The checker reconstructs Eq.~\eqref{eq:flux}, computes $R$ and $N$ exactly, and encloses the absolute polynomial integral defining $P$. The accepted bound includes all residuals. Floating solver tolerances, a wavelength-grid success flag, and a saved verification report are not substituted for these checks.
+
+\subsection{Lower witnesses and complete protocol coverage}
+A lower certificate is an explicitly stored continuous piecewise-linear $d$. Its nodal amplitudes and interval slopes establish $d\in\Dg$ on the whole domain. Since a quadratic kernel times a linear difference is cubic, every response can be integrated exactly after splitting at the relevant knots. A target response larger than $\tau$ proves failure; finding a large response on sampled reflectances alone would not prove a universal upper bound.
+
+For the count result, one exact-matching witness is constructed for each of the five four-light selections. Numerical linear algebra suggests a correction, but rational elimination enforces the twelve test equalities exactly. Uniform scaling then enforces amplitude and actual slope limits. Every subset with fewer than five lights lies inside at least one four-light selection, so the same five witnesses cover all 31 smaller subsets, including the empty set. The proof does not infer minimum count from a greedy selection or from testing only the best observed four-light candidate.
+
+\subsection{A continuous tolerance--regularity enclosure}
+Each full-library certificate defines a sufficient affine inequality
+\begin{equation}
+ R_j+2gP_j+\delta N_j\leq\tau.                           \label{eq:halfplane}
+\end{equation}
+For a fixed coordinate, any valid certificate can be used; the deployment guarantee must hold for every coordinate. With $P_j>0$ in the supplied bank, a sufficient slope is therefore
+\begin{equation}
+ G_-(\delta)=\min_{\text{coordinates }c}\ %
+       \max_{j:\,q_j=q_c}\frac{\tau-R_j-\delta N_j}{2P_j}.
+                                                        \label{eq:lowerenv}
+\end{equation}
+Only the nonnegative certified portion is used. The bank contains 81 original certificates and nine verified convex combinations of certificates for the same target coordinate.
+
+Failure witnesses provide an upper enclosure $G_+(\delta)$. Two witnesses with a strictly failing target in the same signed coordinate can be convexly combined. Their amplitude, slope, and test-tolerance bounds combine convexly; the target remains strictly above $\tau$. This gives continuous failure segments, rather than a claim inferred by interpolating a plotted grid. Witnesses with different failing coordinates are not combined by this argument. Exact intersections of the affine segments verify
+\begin{equation}
+ G_-(\delta)\leq G(\delta)\leq G_+(\delta),\qquad
+                  0\leq\delta\leq0.002.                \label{eq:enclosure}
+\end{equation}
+A critical value enclosed by a strict witness is not automatically itself a strict-failure point. We retain this distinction when quoting endpoint brackets.
+
+\section{Sharp count and the value of precision}\label{sec:results}
+\subsection{Five tests are necessary and sufficient}
+The principal evaluated statement uses the unchanged model and library of Section 2.
+\begin{theorem}[Certified constituent count]\label{thm:count}
+For individual slope $g=0.0355\,\mathrm{nm}^{-1}$ and mismatch limit $\tau=0.02$,
+\begin{equation}
+ n_g(\delta)=5\quad\text{for }0\leq\delta\leq0.000181293988.
+                                                        \label{eq:five}
+\end{equation}
+Every smaller constituent selection fails even at $\delta=0$.
+\end{theorem}
+\begin{proof}
+Nine checked full-library certificates satisfy Eq.~\eqref{eq:dual} at the upper tolerance in Eq.~\eqref{eq:five}; monotonicity proves sufficiency throughout the interval. Table~\ref{tab:four} reports exact-witness lower bounds for every four-light selection. Each witness has zero response in all twelve selected coordinates, belongs to $\Dg$, and exceeds $\tau$ in deployment. The subset coverage described above proves necessity for all 31 smaller selections, at zero and hence at every nonnegative tolerance.
+\end{proof}
+
+\begin{table}[t]
+\centering
+\caption{Exact-test witnesses excluding every four-light selection.}
+\label{tab:four}
+\begin{tabular}{lc}
+\toprule
+Omitted constituent & Deployment mismatch lower bound\\
+\midrule
+FL11 & 0.225987634044\\
+FL7  & 0.025614387784\\
+FL2  & 0.022987792057\\
+D65  & 0.021836307236\\
+A    & 0.028894428339\\
+\bottomrule
+\end{tabular}
+\par\smallskip\footnotesize Each pair matches all coordinates under the other four lights exactly. Bounds are rounded downward; individual slopes are below $0.0355\,\mathrm{nm}^{-1}$. Each witness also excludes every contained smaller selection.
+\end{table}
+
+Figure~\ref{fig:witness} shows the pair for the selection omitting D65, whose lower margin is the smallest in Table~\ref{tab:four}. These are constructed worst-case spectra, not measured materials. The table demonstrates why response precision and information count cannot be interchanged: no increase in the precision of those four tests separates this pair. Repeating exact tests likewise adds no distinguishing information.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{witness.pdf}
+\caption{A continuous exact-matching counterexample for the four-light selection A, FL2, FL7, FL11. (a) The two passive reflectances $r_+=(1+d)/2$ and $r_-=(1-d)/2$, with individual slope below $0.0355\,\mathrm{nm}^{-1}$. (b) Maximum absolute XYZ difference under each test and deployment illuminant. The four selected test responses are exactly zero; floating values are used only for plotting. The deployment mismatch exceeds 0.02. D65 is the omitted candidate test. Plotting code was prepared with OpenAI Codex assistance; MATLAB plotted the stored numerical records.}
+\label{fig:witness}
+\end{figure*}
+
+At the reference tolerance $\delta=0.0001$, the universal full-library upper bound is $0.019183170792$, leaving a positive margin below $\tau$. Necessity is supplied by the exact witnesses, not by numerical proximity of this upper bound to the threshold. At the same slope, a full-library witness proves failure by tolerance $0.000183138235$. Thus the largest successful tolerance is enclosed between $0.000181293988$ and $0.000183138235$; it has not been determined exactly.
+
+\subsection{Critical regularity with all five tests}
+Table~\ref{tab:critical} and Fig.~\ref{fig:frontier} show how precision changes the admissible slope range when all five lights are used. Exact tests permit a critical slope greater than 2.12 times the upper critical-slope bound at tolerance 0.002. This is a ratio of mathematical class boundaries, not an improvement in measured perceptual accuracy.
+
+\begin{table}[t]
+\centering
+\caption{Continuous critical-slope brackets for the full library.}
+\label{tab:critical}
+\begin{tabular}{ccc}
+\toprule
+$\delta$ & Lower bound on $G(\delta)$ & Upper bound on $G(\delta)$\\
+\midrule
+0     & 0.039324263178 & 0.039394217170\\
+0.002 & 0.018486923133 & 0.018546626551\\
+\bottomrule
+\end{tabular}
+\par\smallskip\footnotesize Slopes are in $\mathrm{nm}^{-1}$. Lower endpoints are rounded downward and upper endpoints upward.
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{frontier.pdf}
+\caption{Certified full-library precision--regularity enclosure. Solid and dashed curves delimit universal success and the witness-based upper enclosure of $G$. The shaded band is unresolved, not a confidence interval. Its width is at most $0.001104210242\,\mathrm{nm}^{-1}$ over the entire tolerance interval, checked at all exact envelope breakpoints. MATLAB plotting code was prepared with OpenAI Codex assistance.}
+\label{fig:frontier}
+\end{figure}
+
+The endpoint brackets are substantially narrower than the widest intermediate band. Across $[0,0.002]$, the maximum unresolved slope width is at most $0.001104210242\,\mathrm{nm}^{-1}$. The predeclared uniform resolution target of $0.001\,\mathrm{nm}^{-1}$ was therefore not reached. The tolerance bracket at $g=0.0355$ also does not meet its tighter original resolution target. Neither shortfall weakens Eq.~\eqref{eq:five}, which is a separate exact count statement on a certified interval. The intermediate boundary and its limiting coordinate are not claimed to be completely resolved.
+
+These calculations were developed through successive bounded investigations. Numerical searches produced candidate spectra or dual variables, followed by exact verification. The final refinement used only convex combinations of stored dual certificates, with no new optimizer calls. This development history is retained in the data provenance; the complete eventual study was not specified by one initial preregistration.
+
+\section{Stability of the minimum count}\label{sec:robust}
+\subsection{Reflectance-model and normalized-kernel errors}
+An exact slope assumption is restrictive. Let $\Cg^\rho$ consist of passive continuous reflectances $r$ for which some $r_0\in\Cg$ satisfies $\norm{r-r_0}_\infty\leq\rho$. The actual reflectance need not inherit the slope bound. For an actual difference $d=r-s$, there is $d_0\in\Dg$ with $\norm{d-d_0}_\infty\leq2\rho$, while passivity still gives $|d|\leq1$.
+
+Let actual normalized kernels be $m_i'=m_i+e_i$ and $q'=q+f$, with $\norm{e_i}_1\leq\mu_i$ and $\norm f_1\leq\nu$. All acceptance constraints are imposed on the actual responses. Define the uncancelled residual norm
+\begin{equation}
+ U=\int_I|u|,\qquad u=q-\sum_i v_i m_i.                 \label{eq:U}
+\end{equation}
+\begin{samepage}
+\begin{proposition}[Residual-aware stability]\label{prop:stability}
+For an accepted pair in $\Cg^\rho$,
+\begin{equation}
+ |\ip{q'}d|\leq R+2gP+\sum_i|v_i|\delta_i
+                    +\nu+\sum_i|v_i|\mu_i+2\rho U.     \label{eq:robust}
+\end{equation}
+\end{proposition}
+\end{samepage}
+\begin{proof}
+Decompose the actual target as
+\begin{align*}
+ \ip{q'}d={}&\sum_i v_i\ip{m_i'}d+\ip u{d_0}
+                  +\ip u{d-d_0}\\
+             &+\ip{f-\sum_i v_i e_i}d.
+\end{align*}
+Proposition~\ref{prop:dual} bounds the smooth nominal term. The other terms use actual test acceptance, the uniform approximation bound, and actual passivity, respectively.
+\end{proof}
+
+Retaining the combined residual $u$ avoids replacing $U$ by the potentially much larger sum $\norm q_1+\sum_i|v_i|\norm{m_i}_1$. This residual-norm principle is established optimal-recovery theory~\cite{foucart}. Its quantitative effect here is to preserve the count on a larger model neighborhood. Importantly, $R$ cannot replace $U$: integration by parts uses the regularity of $d_0$, while the model error $d-d_0$ has no such derivative bound.
+
+With uniform kernel allowance $\mu_i=\nu=\mu$, common tolerance $\delta=0.0001$, and $g=0.0355$, the nine checked inequalities give the sufficient region
+\begin{equation}
+ \frac{\mu}{0.000073935629}+\frac{\rho}{0.005633164098}\leq1,
+ \qquad \mu,\rho\geq0.                                \label{eq:kernelregion}
+\end{equation}
+The displayed denominators are rounded inward. The exact rational intersection is checked in the data package.
+
+Necessity remains valid for every allowed realization of the kernels. For each nominal exact witness $d$, a selected actual test has magnitude at most $\mu\norm d_\infty$ and a nominal target of magnitude $t$ has actual magnitude at least $t-\mu\norm d_\infty$. Throughout Eq.~\eqref{eq:kernelregion}, the former is at most $\delta$ and the latter exceeds $\tau$. The witness spectra themselves belong to $\Cg$, hence also to $\Cg^\rho$. Thus the upper and lower arguments concern the same perturbed problem, and the minimum count remains exactly five.
+
+\subsection{Shared illuminant-shape errors and white normalization}
+An illuminant perturbs all three XYZ channels together. A separate error allowance for each normalized kernel can discard this dependence. Consider instead
+\begin{equation}
+ E'=a(E+\Delta E),\qquad a>0,\qquad
+ |\Delta E(\lambda)|\leq\kappa E(\lambda),\quad 0\leq\kappa<1,
+                                                        \label{eq:spd}
+\end{equation}
+for every test and deployment light, with the observer fixed and each response normalized by its actual white $Y$. The gain $a$ cancels. The shape condition holds continuously and prohibits leakage where the nominal SPD vanishes.
+
+For test light $\ell$, combine its signed multiplier kernels before taking absolute values:
+\begin{equation}
+ s_\ell=\sum_{c=X,Y,Z}v_{\ell c}m_{\ell c},\qquad
+ S=\int_I q+\sum_\ell\int_I|s_\ell|.                    \label{eq:S}
+\end{equation}
+Nonnegative XYZ kernels make $\int q=\norm q_1$. Put $z_\ell=\int\Delta E_\ell f_Y/Z_\ell$, so $|z_\ell|\leq\kappa$. The exact block identity is
+\begin{align}
+ \ip{s_\ell}d={}&(1+z_\ell)\sum_c v_{\ell c}\ip{m_{\ell c}'}d\nonumber\\
+ &-\int_I\frac{\Delta E_\ell}{Z_\ell}
+                  \left(\sum_c v_{\ell c}f_c\right)d.  \label{eq:block}
+\end{align}
+The first term is bounded by $(1+\kappa)\delta\sum_c|v_{\ell c}|$; the second by $\kappa\int|s_\ell|$. Applying the residual argument to $d_0$, and using the target denominator $1+z_Q\geq1-\kappa$, yields
+\begin{equation}
+ |\ip{q'}d|\leq
+ \frac{R+2gP+\delta N+\kappa(\delta N+S)+2\rho U}{1-\kappa}.
+                                                        \label{eq:spdrobust}
+\end{equation}
+Both the shared-channel error and normalization are retained. Consequently the nine affine inequalities
+\begin{equation}
+ \kappa(\tau+\delta N+S)+2\rho U
+                  \leq\tau-(R+2gP+\delta N)             \label{eq:spdhalfplanes}
+\end{equation}
+give the sufficient region
+\begin{equation}
+ \frac{\kappa}{0.000103842397}+\frac{\rho}{0.005633164098}\leq1,
+ \qquad\kappa,\rho\geq0.                               \label{eq:spdregion}
+\end{equation}
+The shape-only allowance is about 103.84 parts per million. It is a sufficient mathematical bound, not a measured lamp specification.
+
+For a nominal exact witness define $I_i=\int m_i|d|$ and $I_q=\int q|d|$. Its selected actual tests are bounded above by $\kappa I_i/(1-\kappa)$, while its actual target magnitude is bounded below by $(t-\kappa I_q)/(1+\kappa)$. Exact integration verifies that all selected witness tests are at most $0.000055671797$ and every covering witness retains a deployment lower bound of at least $0.021803184702$ throughout Eq.~\eqref{eq:spdregion}. Thus all 31 smaller selections remain excluded for every allowed SPD realization.
+
+\begin{corollary}[Robust count]\label{cor:robustcount}
+At $g=0.0355\,\mathrm{nm}^{-1}$, $\delta=0.0001$, and $\tau=0.02$, the minimum constituent count is five throughout either Eq.~\eqref{eq:kernelregion} or Eq.~\eqref{eq:spdregion}, under its corresponding uncertainty model.
+\end{corollary}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{stability.pdf}
+\caption{Sufficient joint uncertainty regions preserving the sharp five-test count. (a) Per-spectrum uniform distance $\rho$ from the nominal slope class and per-row normalized-kernel $L^1$ error $\mu$. (b) The same model distance and continuous relative illuminant-shape error $\kappa$, with actual white normalization. The models differ and their vertical axes are not interchangeable. Filled regions certify both sufficiency and necessity. Markers indicate Table~\ref{tab:robust}; boundaries are not proved physically maximal. MATLAB plotting code was prepared with OpenAI Codex assistance.}
+\label{fig:stability}
+\end{figure*}
+
+\begin{table*}[t]
+\centering
+\caption{Joint uncertainty examples retaining the five-test minimum.}
+\label{tab:robust}
+\begin{tabular}{lcccc}
+\toprule
+Uncertainty model & Kernel/shape allowance & Model distance $\rho$ & Five-test upper & Smaller-selection lower\\
+\midrule
+Normalized kernels & $\mu=0$ & 0.005 & 0.019908188912 & 0.021836307236\\
+Normalized kernels & $\mu=0.00002$ & 0.003 & 0.019839138517 & 0.021816307342\\
+Shared SPD shape & $\kappa=0.00005$ & 0.002 & 0.019866473729 & 0.021820357914\\
+Shared SPD shape & $\kappa=0.00002$ & 0.003 & 0.019775498120 & 0.021829927316\\
+\bottomrule
+\end{tabular}
+\par\smallskip\footnotesize Upper bounds are rounded upward; lower bounds are rounded downward. Each lower entry is the smallest bound among the five covering witnesses. The acceptance tolerance is 0.0001 and the deployment limit is 0.02.
+\end{table*}
+
+The two regions in Fig.~\ref{fig:stability} are distinct sufficient guarantees. Neither determines the maximal physical uncertainty radius. Checking all 90 saved certificates did not enlarge their intercepts through selection of an individual certificate: the same coordinate certificate dominates the relevant intercepts. This finite-bank fact does not exclude stronger future certificates, different combinations, or a different analysis. Table~\ref{tab:robust} reports quantitative examples without treating the two uncertainty descriptions as interchangeable.
+
+\section{Supporting prediction interpretation}\label{sec:prediction}
+\subsection{Ambiguity and unrestricted prediction}
+Fix the operators and suppose observations are $y=M_Tr+\eta$, where each test has independently admissible additive error $\norm{\eta_i}_\infty\leq\varepsilon_i$. For a feasible observation, let
+\begin{equation}
+ F_y=\{r\in\Cg:y-M_Tr\in N_{\boldsymbol\varepsilon}\},
+ \qquad K_y=QF_y.                                      \label{eq:fiber}
+\end{equation}
+These sets are compact. Define the minimax error by
+\begin{equation}
+ E_\infty^*(T;\boldsymbol\varepsilon)=\inf_\Phi
+ \sup_{\substack{r\in\Cg\\\eta\in N_{\boldsymbol\varepsilon}}}
+ \norm{\Phi(M_Tr+\eta)-Qr}_\infty.                       \label{eq:minimax}
+\end{equation}
+The infimum permits arbitrary prediction rules returning any vector in $\mathbb R^9$. The coordinatewise midpoint of the ranges of $K_y$ is a smallest enclosing-ball center in the infinity norm, with radius half its diameter. Thus, minimizing independently at each feasible observation gives the classical identity
+\begin{equation}
+ E_\infty^*(T;\boldsymbol\varepsilon)
+      =\frac12\B_g(T;2\boldsymbol\varepsilon).           \label{eq:recovery}
+\end{equation}
+Indeed, two reflectances have a common observation exactly when their selected responses differ coordinatewise by at most $2\varepsilon_i$. Taking the supremum of the fiber diameters gives the right-hand side. For a different additive noise set $N$, the overlap condition is $M_T(r-s)\in N-N$; a factor of two in an infinity-norm tolerance is not universal.
+
+No reconstruction of a physical spectrum is required in Eq.~\eqref{eq:recovery}. Requiring such a reconstruction can constrain the center. In Euclidean target norm, half the diameter is generally only a lower bound on the enclosing radius. Nonlinear perceptual differences do not inherit Eq.~\eqref{eq:recovery}. These restrictions matter when translating a testing certificate into a statement about color prediction.
+
+For the present convex symmetric class and symmetric bounded noise, classical scalar optimal-recovery theory gives an affine optimal rule after centering~\cite{novak,ettehad}. Applying the scalar result to each of finitely many target coordinates gives an affine optimal rule for the maximum-coordinate objective. Affine optimality is therefore supporting established theory, not an additional claimed discovery. The explicit rule below is certified, but is not asserted to attain the exact minimax value.
+
+\subsection{An explicit predictor with calibration errors}
+The nine multiplier rows used for the count certificate define a rational matrix $V\in\mathbb R^{9\times15}$. For actual operators $M',Q'$, supply white-response estimates $w_M,w_Q$ with coordinatewise errors at most $\gamma$ from $M'1,Q'1$. The predictor is
+\begin{equation}
+ \widehat z=V(y-w_M/2)+w_Q/2.                            \label{eq:predictor}
+\end{equation}
+The information includes target white responses; full actual illuminant spectra need not be supplied. White-calibration exposures are not included in the count of reflectance-sample tests.
+
+To bound one row, write $r=1/2+x$ and choose $x_0=r_0-1/2$ with $r_0\in\Cg$, $\norm{x-x_0}_\infty\leq\rho$. Then $|x|,|x_0|\leq1/2$ and $\operatorname{Lip}(x_0)\leq g$. With per-coordinate sample noise at most $\varepsilon$, uniform kernel error $\mu$, and the quantities in Eq.~\eqref{eq:certificate}, direct decomposition gives
+\begin{equation}
+ |\widehat z_j-(Q'r)_j|
+ \leq\frac R2+gP+\varepsilon N+\rho U
+                   +\frac{(\mu+\gamma)(1+N)}2.          \label{eq:prederror}
+\end{equation}
+The last term charges kernel and white-calibration errors explicitly. This proof is uniform over actual operators; it does not apply a fixed-operator minimax identity while silently supplying an unknown operator.
+
+At $\varepsilon=0.00005$, the nine bounds certify error at most 0.01 throughout
+\begin{equation}
+ \frac{\mu+\gamma}{0.000073935629}
+             +\frac{\rho}{0.005633164098}\leq1.          \label{eq:predregion}
+\end{equation}
+Using only nominal white values ensures $\gamma\leq\mu$, so a sufficient substitution is $\mu+\gamma=2\mu$, not $\mu$. The nominal upper error is $0.009591585396$. At $(\mu,\gamma,\rho)=(0.00002,0,0.003)$ it is $0.009919569259$.
+
+The same five witness pairs show that every smaller constituent selection has worst-case error at least $0.010918153618$ nominally, or $0.010908153671$ in that joint example. For each actual operator the two spectra can receive the common central observation $M'1/2$ through opposing admissible noise vectors. Their calibration data are identical, so no predictor can distinguish them. This argument also excludes deterministic adaptive selection of at most four constituents under adversarial Cartesian bounded noise: follow the central-observation path and choose a witness covering its final subset. It does not imply a lower bound for arbitrary mixture test exposures, randomized expected-error criteria, or perturbed noiseless adaptive pair testing.
+
+\section{Reproducibility, interpretation, and limits}
+\subsection{What is independently checkable}
+The associated repository contains the unchanged CIE source tables and metadata, rational certificates and witness spectra, continuous-envelope definitions, MATLAB checks, figure-generation code, and a standard-library Python verifier~\cite{repository}. The core and frontier extension check 90 continuous dual certificates, 32 distinct exact witnesses, 45 strict frontier points, and the five-witness coverage of all 31 smaller protocols. The stability and prediction extensions reconstruct their bounds from the underlying coefficients. Verification does not require the original optimizer, network access, or the historical research checkout.
+
+Independent MATLAB calculations reconstruct kernels from the original CIE tables and integrate polynomials by a different floating implementation. They agree with the rational enclosures within reported numerical tolerances; they are crosschecks, not replacements for the exact inequalities. Fresh-folder runs and deliberate invalid-certificate controls check the portable verifier. The three extensions collectively reject 16 specified faults, including incorrect uncertainty allowances, altered blend weights, and calibration omissions. The mathematical guarantees remain conditional on the declared source and interpolation model, even when all computational checks pass.
+
+\subsection{Scope of the count and deployment family}
+The count is a minimum over selections from five named illuminants. It does not compare every possible physical lamp, arbitrary spectral mixtures used as tests, different sensors, or different normalizations. In particular, a mixture can provide a new measurement direction, so the constituent lower count must not be relabeled a universal minimum number of exposures.
+
+Deployment mixtures do admit a simple extension. If $E=\sum_{j=1}^3a_jE_j$ with $a_j\geq0$ and not all zero, then
+\begin{equation}
+ A_E=\sum_{j=1}^3\beta_j A_{E_j},\qquad
+ \beta_j=\frac{a_jZ_{E_j}}{\sum_k a_kZ_{E_k}}.            \label{eq:mixture}
+\end{equation}
+The weights include white normalization. Convexity of the infinity norm extends a guarantee for the three deployment constituents to every such mixture; inclusion of the constituents gives equality of the worst mismatch over these two deployment families. This remains valid for actual nonnegative constituent SPDs under the corresponding uncertainty assumptions.
+
+\subsection{Scientific interpretation}
+The fixed-library result isolates a useful distinction. Spectral complexity can require an additional independent illumination test even when existing tests are arbitrarily precise. Once the full library is used, precision becomes valuable by allowing a larger spectral class. Robust regions show that the count is not confined to exact membership in the nominal slope class, while also quantifying how stringent the optical assumptions are.
+
+These are universal worst-case statements about mathematical classes. A reflectance dataset can inform the choice of class or test empirical reconstruction error, but cannot establish these universal bounds. Conversely, a worst-case constructed spectrum need not be typical of manufactured surfaces. The normalized XYZ infinity metric provides linear, independently verifiable coordinate guarantees; $0.02$ is not a perceptual color-difference threshold. Experimental validation of lamp stability, observer variation, and the model-distance assumptions would be needed before treating the certified allowances as instrument specifications.
+
+The general concepts of multiple matching, convex spectral constraints, optimal recovery, robust design, and Bernstein certification are established. The evaluated count, precision boundary, and stability guarantees are the scientific results of this study. We make no claim of faster computation, better dataset reconstruction, or perceptual superiority over existing metamer-mismatch and illumination-selection methods. The unresolved bands in Fig.~\ref{fig:frontier} and the sufficient nature of the robust regions remain part of the result.
+
+\section{Conclusion}
+For a declared continuous CIE model, five constituent illumination tests are necessary and sufficient to guarantee a deployment mismatch of at most 0.02 at individual spectral slope $0.0355\,\mathrm{nm}^{-1}$ over a positive interval of acceptance tolerances. Exact counterexamples show that no four constituents can replace the fifth through increased precision. Continuous certificates quantify the benefit of precision when all five tests are retained and establish joint uncertainty regions in which the sharp count persists. The same information yields a calibrated, explicitly computable prediction guarantee. The resulting certificate-and-witness package makes the conditional testing claim reproducible without relying on wavelength-grid optimality or empirical sample coverage.
+
+\begin{backmatter}
+\bmsection{Funding} No specific funding was received for this work.
+\bmsection{Acknowledgments} OpenAI Codex assisted mathematical development, implementation, computational checks, plotting scripts, and preparation of this author-review draft. The figures are deterministic MATLAB plots of stored numerical records. The final author-prepared manuscript and tool disclosure remain subject to the journal's policy; no completed author scientific review is implied.
+\bmsection{Disclosures} The author declares no conflicts of interest.
+\bmsection{Data availability} The source data, certificates, verification code, and figure-generation files are deposited in the associated GitHub repository~\cite{repository}. The repository is private during author review; public release or reviewer access is required before submission. Original CIE data retain their stated attribution and license.
+\end{backmatter}
+
+\clearpage
+\begin{thebibliography}{30}
+\bibitem{worthey} J. A. Worthey, ``Calculation of metameric reflectances,'' Color Res. Appl. \textbf{13}, 76--84 (1988).
+\bibitem{burns} S. A. Burns, J. B. Cohen, and E. N. Kuznetsov, ``Multiple metamers: preserving color matches under diverse illuminants,'' Color Res. Appl. \textbf{14}, 16--22 (1989).
+\bibitem{morovic2006} P. Morovi\v{c} and G. D. Finlayson, ``Metamer-set-based approach to estimating surface reflectance from camera RGB,'' J. Opt. Soc. Am. A \textbf{23}, 1814--1822 (2006).
+\bibitem{sharma} G. Sharma, ``Set theoretic estimation for problems in subtractive color,'' Color Res. Appl. \textbf{25}, 333--348 (2000).
+\bibitem{stiebel} T. Stiebel and D. Merhof, ``The importance of smoothness constraints on spectral object reflectances when modeling metamer mismatching,'' in \emph{IEEE International Conference on Computer Vision Workshops} (2017), pp. 2985--2992.
+\bibitem{morovic2026a} P. Morovi\v{c} and J. Morovi\v{c}, ``Color formation as a Hilbert space operator: quotient structures and limits of metamerism,'' J. Opt. Soc. Am. A \textbf{43}, 1614--1623 (2026).
+\bibitem{morovic2026b} P. Morovi\v{c} and J. Morovi\v{c}, ``Color formation as a Hilbert space operator: metamer mismatching and the limits of chromatic adaptation,'' J. Opt. Soc. Am. A \textbf{43}, 1668--1677 (2026).
+\bibitem{park} J.-I. Park, M.-H. Lee, M. D. Grossberg, and S. K. Nayar, ``Multispectral imaging using multiplexed illumination,'' in \emph{IEEE International Conference on Computer Vision} (2007), pp. 1--8.
+\bibitem{fu} Y. Fu, Y. Zou, Y. Zheng, and H. Huang, ``Spectral reflectance recovery using optimal illuminations,'' Opt. Express \textbf{27}, 30502--30516 (2019).
+\bibitem{niu} S. Niu, G. Wu, and X. Li, ``Spectral filter selection based on human color vision for spectral reflectance recovery,'' Sensors \textbf{23}, 5225 (2023).
+\bibitem{esposito} T. Esposito, M. P. Royer, and K. W. Houser, ``Measures of illuminant-induced metameric mismatch: theory, comparative analysis, and implications for application,'' Opt. Express \textbf{30}, 14686--14708 (2022).
+\bibitem{novak} E. Novak and H. Wo\'zniakowski, \emph{Tractability of Multivariate Problems, Volume I: Linear Information} (European Mathematical Society, 2008), Sec. 4.2.
+\bibitem{tanaskovic} M. Tanaskovi\'c, L. Fagiano, and M. Morari, ``On the optimal worst-case experiment design for constrained linear systems,'' Automatica \textbf{50}, 3291--3298 (2014).
+\bibitem{ettehad} M. Ettehad and S. Foucart, ``Instances of computational optimal recovery: dealing with observation errors,'' SIAM/ASA J. Uncertain. Quantif. \textbf{9}, 1438--1456 (2021).
+\bibitem{foucart} S. Foucart, ``Instances of computational optimal recovery: refined approximability models,'' J. Complexity \textbf{62}, 101503 (2021).
+\bibitem{ciexyz} CIE, ``Colour-matching functions of CIE 1931 standard colorimetric observer,'' CIE dataset (2019), \url{https://doi.org/10.25039/CIE.DS.xvudnb9b}.
+\bibitem{ciea} CIE, ``CIE standard illuminant A---1 nm,'' CIE dataset (2018), \url{https://doi.org/10.25039/CIE.DS.8jsxjrsn}.
+\bibitem{cied65} CIE, ``CIE standard illuminant D65,'' CIE dataset (2019), \url{https://doi.org/10.25039/CIE.DS.hjfjmt59}.
+\bibitem{ciefl} CIE, ``Relative spectral power distributions of illuminants representing typical fluorescent lamps,'' CIE dataset (2018), \url{https://doi.org/10.25039/CIE.DS.54hy6srn}.
+\bibitem{ricciardi} L. A. Ricciardi and M. Vasile, ``Direct transcription of optimal control problems with finite elements on Bernstein basis,'' J. Guid. Control Dyn. \textbf{42}, 229--243 (2019).
+\bibitem{repository} S. Debnath, ``Certified illumination testing: data and computational certificates,'' GitHub repository (2026), \url{https://github.com/shankhya/certified-illumination-testing}.
+\end{thebibliography}
+\end{document}

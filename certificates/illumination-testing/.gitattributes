@@ -1,0 +1,2 @@
+# Preserve source-data and certificate bytes across Windows and Unix checkouts.
+* -text

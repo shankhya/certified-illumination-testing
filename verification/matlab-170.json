@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "optimizerCalls": 0,
+  "rawCIETablesRead": 4,
+  "independentQuadraticRootIntegration": true,
+  "maximumResidualNormDiscrepancy": 2.4633073358870661E-16,
+  "modelAxisDiscrepancy": 8.6736173798840355E-19,
+  "verticesChecked": 3,
+  "maximumVertexUpper": 0.02,
+  "maximumFourLightEqualityResidual": 1.4767172402431472E-17,
+  "maximumWitnessTargetDiscrepancy": 5.5511151231257827E-17,
+  "excludedProtocols": 31,
+  "residualSubstitutionCounterexamplePassed": true
+}

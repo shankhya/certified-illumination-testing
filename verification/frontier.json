@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "optimizerCalls": 0,
+  "dualCount": 90,
+  "newBlendedDuals": 9,
+  "exactWitnessCount": 32,
+  "strictFrontierPoints": 45,
+  "frontier": {
+    "safePieces": 16,
+    "failurePieces": 6,
+    "maximumGap": 0.0011042102411597365,
+    "uniformGapTargetMet": false
+  },
+  "testCount": {
+    "minimumConstituentLights": 5,
+    "excludedProtocols": 31,
+    "g": 0.0355,
+    "pairwiseToleranceThrough": 0.000181293988,
+    "fiveLightUpper": 0.019999999995019363
+  },
+  "coreUnchanged": true,
+  "elapsedSeconds": 46.093,
+  "faultCases": [
+    {
+      "name": "altered blend weight with old bound",
+      "status": "REJECTED_AS_EXPECTED",
+      "reason": "Dual test norm"
+    },
+    {
+      "name": "mixed target coordinates",
+      "status": "REJECTED_AS_EXPECTED",
+      "reason": "Mixed target coordinates"
+    },
+    {
+      "name": "understated whole-interval gap",
+      "status": "REJECTED_AS_EXPECTED",
+      "reason": "Maximum continuum gap identity"
+    },
+    {
+      "name": "false target-met report",
+      "status": "REJECTED_AS_EXPECTED",
+      "reason": "False precision success flag"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "optimizerCalls": 0,
+  "analyticControls": 5,
+  "faultCases": [
+    {
+      "name": "changed core binding",
+      "status": "REJECTED_AS_EXPECTED",
+      "reason": "Core proof binding"
+    },
+    {
+      "name": "zero model residual norm",
+      "status": "REJECTED_AS_EXPECTED",
+      "reason": "Residual norm understated"
+    },
+    {
+      "name": "zero shared block norm",
+      "status": "REJECTED_AS_EXPECTED",
+      "reason": "Shared block norm understated"
+    },
+    {
+      "name": "doubled model allowance",
+      "status": "REJECTED_AS_EXPECTED",
+      "reason": "Norm triangle unsafe"
+    },
+    {
+      "name": "doubled shape allowance",
+      "status": "REJECTED_AS_EXPECTED",
+      "reason": "Shape triangle unsafe"
+    },
+    {
+      "name": "combining both full norm-axis allowances",
+      "status": "REJECTED_AS_EXPECTED",
+      "reason": "Point outside norm guarantee"
+    },
+    {
+      "name": "wrong normalization assumption",
+      "status": "REJECTED_AS_EXPECTED",
+      "reason": "Stability assumptions changed"
+    }
+  ]
+}

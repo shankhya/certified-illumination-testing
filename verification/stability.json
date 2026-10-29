@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "optimizerCalls": 0,
+  "continuousDualsRechecked": 9,
+  "exactWitnessesReintegrated": 5,
+  "excludedProtocols": 31,
+  "minimumConstituentTests": 5,
+  "muAxis": 7.393562988769145e-05,
+  "rhoAxis": 0.00563316409875879,
+  "kappaAxis": 0.00010384239720984394,
+  "normAndShapeTrianglesVerified": true,
+  "examples": [
+    {
+      "kind": "kernel",
+      "error": 2e-05,
+      "rho": 0.003,
+      "upper": 0.019839138516957656,
+      "lower": 0.021816307342045115
+    },
+    {
+      "kind": "shape",
+      "error": 5e-05,
+      "rho": 0.002,
+      "upper": 0.019866473728012368,
+      "lower": 0.021820357914411923
+    },
+    {
+      "kind": "shape",
+      "error": 2e-05,
+      "rho": 0.003,
+      "upper": 0.01977549811900964,
+      "lower": 0.021829927316312045
+    }
+  ],
+  "analyticControls": 5
+}
